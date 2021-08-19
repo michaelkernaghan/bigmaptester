@@ -4,13 +4,13 @@
   import { BeaconWallet } from "@taquito/beacon-wallet";
   import { NetworkType } from "@airgap/beacon-sdk";
   import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
-import type { Address } from "cluster";
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
   let userAddress: String;
   let subscription: HubConnection;
   let blockHead: { protocol: string; level: number; lastUpdate: string };
+  let errors = {};
 
   const rpcUrl = "https://api.tez.ie/rpc/granadanet";
 
@@ -46,6 +46,7 @@ import type { Address } from "cluster";
   let simpleValueInput = 10;
 
   const compoundKey = async () => {
+    errors = {};
     loading = true;
     try {
       const contract = await Tezos.contract.at(
@@ -55,7 +56,7 @@ import type { Address } from "cluster";
       await op.confirmation();
       op_hash = op.hash;
     } catch (error) {
-      console.log(error);
+      errors = error.message;
     }
     success = true;
     loading = false;
@@ -74,7 +75,7 @@ import type { Address } from "cluster";
       await op.confirmation();
       op_hash = op.hash;
     } catch (error) {
-      console.log(error);
+      errors = error.message;
     }
     success = true;
     loading = false;
@@ -90,8 +91,8 @@ import type { Address } from "cluster";
     await op.confirmation();
     op_hash = op.hash;
     } catch (error) {
-      console.log(error);
-     }
+      errors = error.message;  
+    }
     success = true;
     loading = false;
   };
@@ -172,10 +173,17 @@ import type { Address } from "cluster";
           </div>
             <p></p>
             {#if success} 
+              {#if errors}
+                <div class="errormessage">
+                {errors}
+                </div>
+              {:else}            
             <div class="success">
-              The app thinks the op succeeded
+            The app thinks the op succeeded
             </div>
+
             <button on:click={disconnect}>Close the wallet!</button>
+            {/if}
             {/if}
       {:else}
         <button on:click={connect}>Open a wallet!</button>
@@ -207,6 +215,9 @@ import type { Address } from "cluster";
         background-color: rgb(243, 241, 134);
      //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
     }
+
+  .errormessage { color: red; }
+  
   .container {
     font-size: 20px;
     max-width: 100%;
