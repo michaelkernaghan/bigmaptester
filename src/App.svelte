@@ -187,7 +187,7 @@
             {/if}
       {:else}
         <button on:click={connect}>Open a wallet!</button>
-        <br />
+        <br><br />
         <br />
       {/if}
     </div>  
@@ -196,12 +196,18 @@
         href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
         >here</a
       >
-      <br />
+      <br /><br>
       The project code is
       <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
     </div> 
     <br />
-    <br />
+    {#if blockHead}
+    <div class="chain-info">
+      <p>Protocol: {blockHead.protocol}</p>
+      <p>Level: {blockHead.level}</p>
+      <p>Block timestamp: {blockHead.lastUpdate}</p>
+    </div>
+  {/if}
   </div>
   <br />
 </main>
@@ -229,6 +235,16 @@
       margin: 10px;
     }
 
+    .chain-info {
+      font-size: 15px;
+      font-family: 'Luckiest Guy', cursive;
+
+      p {
+        margin: 5px;
+        font-style: italic;
+        color: $tezos-blue;
+      }
+    }
 
     .note {
       font-size: 18px;
