@@ -4,9 +4,11 @@
   import { BeaconWallet } from "@taquito/beacon-wallet";
   import { NetworkType } from "@airgap/beacon-sdk";
   import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
+import type { Address } from "cluster";
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
+  let userAddress: String;
   let subscription: HubConnection;
   let blockHead: { protocol: string; level: number; lastUpdate: string };
 
@@ -24,6 +26,7 @@
           rpcUrl,
         },
       });
+      userAddress = await wallet.getPKH()
       Tezos.setWalletProvider(wallet);
     } catch (err) {
       console.error(err);
@@ -138,16 +141,7 @@
     <div class="title">Test BigMaps!</div>
     <br />
     <div>
-      {#if wallet}
-        <div>
-          {#if loading}
-          <br />
-          <br />
-            <img src={'images/spinning_arrows.gif'} alt="loading...">
-            <br />
-          {:else}
-          <br />
-          <br />
+      {#if userAddress}
           <div>
             <div class="note">Update a Compound Key BigMap</div>
             <input
@@ -183,8 +177,6 @@
             </div>
             <button on:click={disconnect}>Close the wallet!</button>
             {/if}
-          {/if} 
-          </div>
       {:else}
         <button on:click={connect}>Open a wallet!</button>
         <br />
@@ -208,12 +200,16 @@
 
 <style lang="scss">
   $tezos-blue: #178309;
-  $tezos-red: #ce0808;
+  $tezos-red: #ec1010;
   @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap');
-
+  
+  :global(body){
+        background-color: rgb(243, 241, 134);
+     //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
+    }
   .container {
     font-size: 20px;
-    max-width: 50%;
+    max-width: 100%;
 
     .title {
       color: $tezos-blue;
@@ -222,11 +218,6 @@
       margin: 10px;
     }
 
-    // .subtitle {
-    //   font-size: 23px;
-    //   color: rgb(14, 160, 38);
-    //   margin: 10px;
-    // }
 
     .note {
       font-size: 18px;
