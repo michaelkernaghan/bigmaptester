@@ -178,7 +178,7 @@
           </div>
             <p></p>
             {#if success} 
-            <div class="note">
+            <div class="success">
               The app thinks the op succeeded
             </div>
             <button on:click={disconnect}>Close the wallet!</button>
@@ -207,7 +207,9 @@
 </main>
 
 <style lang="scss">
-  $tezos-blue: #1b800e;
+  $tezos-blue: #178309;
+  $tezos-red: #ce0808;
+  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap');
 
   .container {
     font-size: 20px;
@@ -215,6 +217,7 @@
 
     .title {
       color: $tezos-blue;
+      font-family: 'Luckiest Guy', cursive;
       font-size: 80px;
       margin: 10px;
     }
@@ -227,7 +230,15 @@
 
     .note {
       font-size: 18px;
-      color: rgb(14, 160, 38);
+      font-family: 'Luckiest Guy', cursive;
+      color: $tezos-blue;
+      margin: 10px;
+    }
+
+    .success {
+      font-size: 18px;
+      font-family: 'Luckiest Guy', cursive;
+      color: $tezos-red;
       margin: 10px;
     }
 
@@ -238,6 +249,7 @@
       background-color: white;
       padding: 4px;
       font-size: 11px;
+      font-family: 'Luckiest Guy', cursive;
       color: $tezos-blue;
       transition: 0.3s;
       cursor: pointer;
