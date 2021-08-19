@@ -26,10 +26,10 @@
           rpcUrl,
         },
       });
-      userAddress = await wallet.getPKH()
       Tezos.setWalletProvider(wallet);
+      userAddress = await wallet.getPKH();
     } catch (err) {
-      console.error(err);
+      errors = err.message;
     }
   };
 
@@ -143,6 +143,8 @@
     <br />
     <div>
       {#if userAddress}
+          <div class="welcome">Welcome {userAddress}! </div>
+          <br>
           <div>
             <div class="note">Update a Compound Key BigMap</div>
             <input
@@ -177,6 +179,8 @@
                 <div class="errormessage">
                 {errors}
                 </div>
+                <br>
+                <button on:click={disconnect}>Close the wallet!</button>
               {:else}            
             <div class="success">
             The app thinks the op succeeded
@@ -216,6 +220,7 @@
   $tezos-blue: #178309;
   $tezos-red: #ec1010;
   @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap');
   
   :global(body){
         background-color: rgb(243, 241, 134);
@@ -230,14 +235,14 @@
 
     .title {
       color: $tezos-blue;
-      font-family: 'Luckiest Guy', cursive;
+      font-family: 'Racing Sans One', cursive;
       font-size: 80px;
       margin: 10px;
     }
 
     .chain-info {
       font-size: 15px;
-      font-family: 'Luckiest Guy', cursive;
+      font-family: 'Racing Sans One', cursive;
 
       p {
         margin: 5px;
@@ -248,14 +253,21 @@
 
     .note {
       font-size: 18px;
-      font-family: 'Luckiest Guy', cursive;
+      font-family: 'Racing Sans One', cursive;
       color: $tezos-blue;
+      margin: 10px;
+    }
+
+    .welcome {
+      font-size: 24px;
+      font-family: 'Racing Sans One', cursive;
+      color: rgb(28, 134, 221);;
       margin: 10px;
     }
 
     .success {
       font-size: 18px;
-      font-family: 'Luckiest Guy', cursive;
+      font-family: 'Racing Sans One', cursive;
       color: $tezos-red;
       margin: 10px;
     }
@@ -267,7 +279,7 @@
       background-color: white;
       padding: 4px;
       font-size: 11px;
-      font-family: 'Luckiest Guy', cursive;
+      font-family: 'Racing Sans One', cursive;
       color: $tezos-blue;
       transition: 0.3s;
       cursor: pointer;
