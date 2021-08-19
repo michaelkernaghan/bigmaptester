@@ -81,16 +81,16 @@
   const singleValue = async () => {
     loading = true;
     success = false;
-    //try {
+    try {
     const contract = await Tezos.contract.at(
       "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
     );
     const op = await contract.methods.singleValue(simpleValueInput).send();
     await op.confirmation();
     op_hash = op.hash;
-    //} catch (error) {
-    //  console.log(error);
-    // }
+    } catch (error) {
+      console.log(error);
+     }
     success = true;
     loading = false;
   };
@@ -169,16 +169,15 @@
         bind:value={simpleValueInput}
       />
       <button on:click={singleValue}>Go!</button>
+    </div>
       <br /><br />
       {#if loading}
-        ... loading ...
+      <div class="note">... loading ...</div>        
       {:else if success}
         <br />
-        <!-- <div class="subtitle">
-          <li>New Compound Key bigMap: goes here</li>
-          <li>New Compound Value bigMap: goes here</li>
-          <li>New Simple Value bigMap: goes here</li>
-        </div> -->
+        <div class="note">
+          The app thinks the op succeeded
+        </div>
       {/if}
       <br /><br />
       <div>
@@ -199,7 +198,6 @@
         <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
       </div>
     </div>
-  </div>
 </main>
 
 <style lang="scss">
