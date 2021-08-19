@@ -44,7 +44,6 @@
 
   const compoundKey = async () => {
     loading = true;
-    success = false;
     try {
       const contract = await Tezos.contract.at(
         "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
@@ -80,7 +79,6 @@
 
   const singleValue = async () => {
     loading = true;
-    success = false;
     try {
     const contract = await Tezos.contract.at(
       "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
@@ -138,67 +136,74 @@
 <main>
   <div class="container">
     <div class="title">Test BigMaps!</div>
-    <!-- <div class="subtitle">
-      <li>Compound Key bigMap: fetch and put here</li>
-      <li>Compound Value bigMap: here</li>
-      <li>Simple Value bigMap: here</li>
-    </div> -->
-
     <br />
     <div>
-       
-      <div class="note">Update a Compound Key BigMap</div>
-      <input
-        type="text"
-        bind:value={compoundKeyInput}
-      />
-      <button on:click={compoundKey}>Go!</button>
-    </div>
-    <br />
-    <div>
-      <div class="note">Update a Compound Value BigMap</div>
-      <input
-        type="text"
-        class="amount"
-        bind:value={compoundValueInput}
-      />
-      <button on:click={compoundValue}>Go!</button>
-    </div>
-    <br />
-    <div>
-      <div class="note">Update a Simple Value BigMap</div>
-       <input
-        type="text"
-        class="amount"
-        bind:value={simpleValueInput}
-      />
-      <button on:click={singleValue}>Go!</button>
-    </div>
-      {#if loading}
-      <div class="note">... loading ...</div>        
-      {:else if success}
-        <div class="note">
-          The app thinks the op succeeded
-        </div>
-      {/if}
-      <div>
-        {#if wallet}
-          <button on:click={disconnect}>Disconnect</button>
-        {:else}
-          <button on:click={connect}>Connect now!</button>
-        {/if}
-      </div>
-      <br />
-      <div class="note">
-        The contract is <a
-          href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
-          >here</a
-        >
+      {#if wallet}
+        <div>
+          {#if loading}
+          <br />
+          <br />
+            <img src={'images/spinning_arrows.gif'} alt="loading...">
+            <br />
+          {:else}
+          <br />
+          <br />
+          <div>
+            <div class="note">Update a Compound Key BigMap</div>
+            <input
+              type="text"
+              bind:value={compoundKeyInput}
+            />
+            <button on:click={compoundKey}>Go!</button>
+          </div>
+          <br />
+          <div>
+            <div class="note">Update a Compound Value BigMap</div>
+            <input
+              type="text"
+              class="amount"
+              bind:value={compoundValueInput}
+            />
+            <button on:click={compoundValue}>Go!</button>
+          </div>
+          <br />
+          <div>
+            <div class="note">Update a Simple Value BigMap</div>
+            <input
+              type="text"
+              class="amount"
+              bind:value={simpleValueInput}
+            />
+            <button on:click={singleValue}>Go!</button>
+          </div>
+            <p></p>
+            {#if success} 
+            <div class="note">
+              The app thinks the op succeeded
+            </div>
+            <button on:click={disconnect}>Close the wallet!</button>
+            {/if}
+          {/if} 
+          </div>
+      {:else}
+        <button on:click={connect}>Open a wallet!</button>
         <br />
-        The project code is
-        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
-      </div>
-    </div>
+        <br />
+      {/if}
+    </div>  
+    <div class="note">
+      The contract is <a
+        href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
+        >here</a
+      >
+      <br />
+      The project code is
+      <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
+    </div> 
+    <br />
+    <br />
+  </div>
+  <br />
 </main>
 
 <style lang="scss">
