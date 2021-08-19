@@ -51,7 +51,7 @@
       );
       const op = await contract.methods.compoundKey(compoundKeyInput).send();
       await op.confirmation();
-      op_hash = op.hash;     
+      op_hash = op.hash;
     } catch (error) {
       console.log(error);
     }
@@ -63,12 +63,14 @@
     loading = true;
     success = false;
     try {
-    const contract = await Tezos.contract.at(
-      "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
-    );
-    const op = await contract.methods.compoundValue(compoundValueInput).send();
-    await op.confirmation();
-    op_hash = op.hash;
+      const contract = await Tezos.contract.at(
+        "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
+      );
+      const op = await contract.methods
+        .compoundValue(compoundValueInput)
+        .send();
+      await op.confirmation();
+      op_hash = op.hash;
     } catch (error) {
       console.log(error);
     }
@@ -80,15 +82,15 @@
     loading = true;
     success = false;
     //try {
-      const contract = await Tezos.contract.at(
-        "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
-      );
-      const op = await contract.methods.singleValue(simpleValueInput).send();
-      await op.confirmation();
-      op_hash = op.hash;
+    const contract = await Tezos.contract.at(
+      "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
+    );
+    const op = await contract.methods.singleValue(simpleValueInput).send();
+    await op.confirmation();
+    op_hash = op.hash;
     //} catch (error) {
     //  console.log(error);
-   // }
+    // }
     success = true;
     loading = false;
   };
@@ -186,11 +188,15 @@
           <button on:click={connect}>Connect now!</button>
         {/if}
       </div>
-      <div class="subtitle">
+      <br />
+      <div class="note">
         The contract is <a
           href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
           >here</a
         >
+        <br />
+        The project code is
+        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
       </div>
     </div>
   </div>
@@ -209,8 +215,14 @@
       margin: 20px;
     }
 
-    .subtitle {
-      font-size: 23px;
+    // .subtitle {
+    //   font-size: 23px;
+    //   color: rgb(14, 160, 38);
+    //   margin: 10px;
+    // }
+
+    .note {
+      font-size: 16px;
       color: rgb(14, 160, 38);
       margin: 10px;
     }
