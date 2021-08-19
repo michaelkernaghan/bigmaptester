@@ -174,11 +174,9 @@
       />
       <button on:click={singleValue}>Go!</button>
     </div>
-      <br /><br />
       {#if loading}
       <div class="note">... loading ...</div>        
       {:else if success}
-        <br />
         <div class="note">
           The app thinks the op succeeded
         </div>
