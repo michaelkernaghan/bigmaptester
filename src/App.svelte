@@ -146,24 +146,28 @@
 
     <br />
     <div>
-      Update a Compound Key BigMap with <input
+       
+      <div class="note">Update a Compound Key BigMap</div>
+      <input
         type="text"
         bind:value={compoundKeyInput}
       />
       <button on:click={compoundKey}>Go!</button>
     </div>
-    <br /><br />
+    <br />
     <div>
-      Update a Compound Value BigMap with <input
+      <div class="note">Update a Compound Value BigMap</div>
+      <input
         type="text"
         class="amount"
         bind:value={compoundValueInput}
       />
       <button on:click={compoundValue}>Go!</button>
     </div>
-    <br /><br />
+    <br />
     <div>
-      Update a Simple Value BigMap with <input
+      <div class="note">Update a Simple Value BigMap</div>
+       <input
         type="text"
         class="amount"
         bind:value={simpleValueInput}
@@ -179,7 +183,6 @@
           The app thinks the op succeeded
         </div>
       {/if}
-      <br /><br />
       <div>
         {#if wallet}
           <button on:click={disconnect}>Disconnect</button>
@@ -209,8 +212,8 @@
 
     .title {
       color: $tezos-blue;
-      font-size: 100px;
-      margin: 20px;
+      font-size: 80px;
+      margin: 10px;
     }
 
     // .subtitle {
@@ -220,7 +223,7 @@
     // }
 
     .note {
-      font-size: 16px;
+      font-size: 18px;
       color: rgb(14, 160, 38);
       margin: 10px;
     }
@@ -230,8 +233,8 @@
       border: solid 2px $tezos-blue;
       border-radius: 5px;
       background-color: white;
-      padding: 10px;
-      font-size: 15px;
+      padding: 4px;
+      font-size: 11px;
       color: $tezos-blue;
       transition: 0.3s;
       cursor: pointer;
