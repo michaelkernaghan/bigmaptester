@@ -4,10 +4,11 @@
   import { BeaconWallet } from "@taquito/beacon-wallet";
   import { NetworkType } from "@airgap/beacon-sdk";
   import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
+  import { Schema } from "@taquito/michelson-encoder";
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
-  let userAddress: String;
+  let userAddress: string;
   let subscription: HubConnection;
   let blockHead: { protocol: string; level: number; lastUpdate: string };
   let errors = {};
@@ -45,6 +46,9 @@
   let compoundKeyInput = 10;
   let compoundValueInput = 10;
   let simpleValueInput = 10;
+  let compoundKeyStorage = "";
+  let compoundValueStorage = "";
+  let simpleValueStorage = "";
 
   const compoundKey = async () => {
     errors = {};
@@ -56,6 +60,17 @@
       const op = await contract.methods.compoundKey(compoundKeyInput).send();
       await op.confirmation();
       op_hash = op.opHash;
+      compoundKeyStorage = await Tezos.contract.getBigMapKeyByID(
+        "32001",
+        userAddress,
+        new Schema({
+          prim: "big_map",
+          args: [
+            { prim: "pair", args: [{ prim: "address" }, { prim: "nat" }] },
+            { prim: "nat" },
+          ],
+        })
+      );
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
@@ -75,6 +90,17 @@
         .send();
       await op.confirmation();
       op_hash = op.opHash;
+      compoundValueStorage = await Tezos.contract.getBigMapKeyByID(
+        "32002",
+        userAddress,
+        new Schema({
+          prim: "big_map",
+          args: [
+            { prim: "address" },
+            { prim: "pair", args: [{ prim: "int" }, { prim: "address" }] },
+          ],
+        })
+      );
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
@@ -92,12 +118,21 @@
       const op = await contract.methods.singleValue(simpleValueInput).send();
       await op.confirmation();
       op_hash = op.opHash;
+      simpleValueStorage = await Tezos.contract.getBigMapKeyByID(
+        "32003",
+        userAddress,
+        new Schema({
+          prim: "big_map",
+          args: [{ prim: "address" }, { prim: "mutez" }],
+        })
+      );
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
     success = true;
     loading = false;
   };
+
   const subscribeToEvents = async () => {
     const connection = new HubConnectionBuilder()
       .withUrl("https://api.tzkt.io/v1/events")
@@ -160,33 +195,42 @@
           <div class="note">Update a Compound Key BigMap</div>
           <input type="text" bind:value={compoundKeyInput} />
           <button on:click={compoundKey}>Go!</button>
+          <div class="storage">
+            New Compound Key Storage: {compoundKeyStorage}
+          </div>
         </div>
         <br />
         <div>
           <div class="note">Update a Compound Value BigMap</div>
           <input type="text" class="amount" bind:value={compoundValueInput} />
           <button on:click={compoundValue}>Go!</button>
+          <div class="storage">
+            New Compound Value Storage: {compoundValueStorage}
+          </div>
         </div>
         <br />
         <div>
           <div class="note">Update a Simple Value BigMap</div>
           <input type="text" class="amount" bind:value={simpleValueInput} />
           <button on:click={singleValue}>Go!</button>
+          <div class="storage">
+            New Simple Value Storage: {simpleValueStorage}
+          </div>
         </div>
-        <p />
+        <!-- <p /> -->
         {#if loading}
           <br />
           <br />
           <img src={"images/spinning_arrows.gif"} alt="loading..." />
         {:else if success}
-          <!-- {#if errors}
+          {#if errors > {} }
             <div class="errormessage">
               {errors}
             </div>
             <br />
-          {:else} -->
-          <div class="success">Success! Operation Hash is {op_hash}</div>
-          <!-- {/if} -->
+          {:else}
+            <div class="success">Success! Operation Hash is {op_hash}</div>
+          {/if}
         {/if}
       {:else}
         <button on:click={connect}>Open a wallet!</button>
@@ -195,27 +239,29 @@
       {/if}
     </div>
     <br />
-    <div class="note">
-      See the operations <a
-        href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
-        >here</a
-      >
-      <br /><br />
-      The project code is
-      <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
+    <div>
+      <div class="note">
+        See the operations <a
+          href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
+          >here</a
+        >
+        <br /><br />
+        The project code is
+        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
+      </div>
+      <br />
+      {#if blockHead}
+        <div class="chain-info">
+          <p>Protocol: {blockHead.protocol}</p>
+          <p>Level: {blockHead.level}</p>
+          <p>Block timestamp: {blockHead.lastUpdate}</p>
+        </div>
+      {/if}
+      <br />
+      <!-- <button on:click={disconnect}>Close wallet!</button> -->
     </div>
     <br />
-    {#if blockHead}
-      <div class="chain-info">
-        <p>Protocol: {blockHead.protocol}</p>
-        <p>Level: {blockHead.level}</p>
-        <p>Block timestamp: {blockHead.lastUpdate}</p>
-      </div>
-    {/if}
-    <br />
-    <!-- <button on:click={disconnect}>Close wallet!</button> -->
   </div>
-  <br />
 </main>
 
 <style lang="scss">
@@ -224,10 +270,10 @@
   @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap");
   @import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap");
 
-   :global(body) {
-     background-color: rgb(252, 252, 249);
-  //   //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
-   }
+  :global(body) {
+    background-color: rgb(245, 245, 206);
+    //   //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
+  }
 
   // .errormessage {
   //   color: red;
@@ -261,6 +307,13 @@
       font-size: 18px;
       font-family: "Racing Sans One", cursive;
       color: $tezos-blue;
+      margin: 10px;
+    }
+
+    .storage {
+      font-size: 16px;
+      font-family: "Racing Sans One", cursive;
+      color: rgb(28, 134, 221);
       margin: 10px;
     }
 
