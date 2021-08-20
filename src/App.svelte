@@ -205,7 +205,7 @@
           <input type="text" class="amount" bind:value={compoundValueInput} />
           <button on:click={compoundValue}>Go!</button>
           <div class="storage">
-            New Compound Value Storage: {compoundValueStorage}
+            New Compound Value Storage: {compoundValueStorage[0]}
           </div>
         </div>
         <br />
