@@ -11,6 +11,7 @@
   let subscription: HubConnection;
   let blockHead: { protocol: string; level: number; lastUpdate: string };
   let errors = {};
+  let op_hash = "";
   let contractAddress = "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym";
 
   const rpcUrl = "https://api.tez.ie/rpc/granadanet";
@@ -41,13 +42,14 @@
 
   let success = false;
   let loading = false;
-  let op_hash = "";
   let compoundKeyInput = 10;
   let compoundValueInput = 10;
   let simpleValueInput = 10;
 
   const compoundKey = async () => {
     errors = {};
+    op_hash = "";
+    success = false;
     loading = true;
     try {
       const contract = await Tezos.wallet.at(contractAddress);
@@ -62,6 +64,8 @@
   };
 
   const compoundValue = async () => {
+    errors = {};
+    op_hash = "";
     loading = true;
     success = false;
     try {
@@ -79,7 +83,10 @@
   };
 
   const singleValue = async () => {
+    errors = {};
+    op_hash = "";
     loading = true;
+    success = false;
     try {
       const contract = await Tezos.wallet.at(contractAddress);
       const op = await contract.methods.singleValue(simpleValueInput).send();
@@ -222,11 +229,11 @@
   //   //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
    }
 
-  .errormessage {
-    color: red;
-    font-size: 18px;
-    font-family: "Racing Sans One", cursive;
-  }
+  // .errormessage {
+  //   color: red;
+  //   font-size: 18px;
+  //   font-family: "Racing Sans One", cursive;
+  // }
 
   .container {
     font-size: 20px;
