@@ -11,6 +11,7 @@
   let subscription: HubConnection;
   let blockHead: { protocol: string; level: number; lastUpdate: string };
   let errors = {};
+  let contractAddress = "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym";
 
   const rpcUrl = "https://api.tez.ie/rpc/granadanet";
 
@@ -49,14 +50,12 @@
     errors = {};
     loading = true;
     try {
-      const contract = await Tezos.contract.at(
-        "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
-      );
+      const contract = await Tezos.wallet.at(contractAddress);
       const op = await contract.methods.compoundKey(compoundKeyInput).send();
       await op.confirmation();
-      op_hash = op.hash;
+      op_hash = op.opHash;
     } catch (error) {
-      errors = error.message;
+      errors = JSON.stringify(error.message);
     }
     success = true;
     loading = false;
@@ -66,16 +65,14 @@
     loading = true;
     success = false;
     try {
-      const contract = await Tezos.contract.at(
-        "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
-      );
+      const contract = await Tezos.wallet.at(contractAddress);
       const op = await contract.methods
         .compoundValue(compoundValueInput)
         .send();
       await op.confirmation();
-      op_hash = op.hash;
+      op_hash = op.opHash;
     } catch (error) {
-      errors = error.message;
+      errors = JSON.stringify(error.message);
     }
     success = true;
     loading = false;
@@ -84,14 +81,12 @@
   const singleValue = async () => {
     loading = true;
     try {
-    const contract = await Tezos.contract.at(
-      "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym"
-    );
-    const op = await contract.methods.singleValue(simpleValueInput).send();
-    await op.confirmation();
-    op_hash = op.hash;
+      const contract = await Tezos.wallet.at(contractAddress);
+      const op = await contract.methods.singleValue(simpleValueInput).send();
+      await op.confirmation();
+      op_hash = op.opHash;
     } catch (error) {
-      errors = error.message;  
+      errors = JSON.stringify(error.message);
     }
     success = true;
     loading = false;
@@ -122,6 +117,15 @@
 
   onMount(async () => {
     Tezos = new TezosToolkit(rpcUrl);
+    wallet = new BeaconWallet({
+      name: "BigMapTesting",
+      preferredNetwork: NetworkType.GRANADANET,
+    });
+    const activeAccount = await wallet.client.getActiveAccount();
+    if (activeAccount) {
+      userAddress = activeAccount.address;
+      Tezos.setWalletProvider(wallet);
+    }
     const headerInfo = await Tezos.rpc.getBlockHeader();
     blockHead = {
       protocol: headerInfo.protocol,
@@ -143,75 +147,66 @@
     <br />
     <div>
       {#if userAddress}
-          <div class="welcome">Welcome {userAddress}! </div>
-          <br>
-          <div>
-            <div class="note">Update a Compound Key BigMap</div>
-            <input
-              type="text"
-              bind:value={compoundKeyInput}
-            />
-            <button on:click={compoundKey}>Go!</button>
-          </div>
+        <div class="welcome">Welcome {userAddress}!</div>
+        <br />
+        <div>
+          <div class="note">Update a Compound Key BigMap</div>
+          <input type="text" bind:value={compoundKeyInput} />
+          <button on:click={compoundKey}>Go!</button>
+        </div>
+        <br />
+        <div>
+          <div class="note">Update a Compound Value BigMap</div>
+          <input type="text" class="amount" bind:value={compoundValueInput} />
+          <button on:click={compoundValue}>Go!</button>
+        </div>
+        <br />
+        <div>
+          <div class="note">Update a Simple Value BigMap</div>
+          <input type="text" class="amount" bind:value={simpleValueInput} />
+          <button on:click={singleValue}>Go!</button>
+        </div>
+        <p />
+        {#if loading}
           <br />
-          <div>
-            <div class="note">Update a Compound Value BigMap</div>
-            <input
-              type="text"
-              class="amount"
-              bind:value={compoundValueInput}
-            />
-            <button on:click={compoundValue}>Go!</button>
-          </div>
           <br />
-          <div>
-            <div class="note">Update a Simple Value BigMap</div>
-            <input
-              type="text"
-              class="amount"
-              bind:value={simpleValueInput}
-            />
-            <button on:click={singleValue}>Go!</button>
-          </div>
-            <p></p>
-            {#if success} 
-              {#if errors}
-                <div class="errormessage">
-                {errors}
-                </div>
-                <br>
-                <button on:click={disconnect}>Close the wallet!</button>
-              {:else}            
-            <div class="success">
-            The app thinks the op succeeded
+          <img src={"images/spinning_arrows.gif"} alt="loading..." />
+        {:else if success}
+          <!-- {#if errors}
+            <div class="errormessage">
+              {errors}
             </div>
-
-            <button on:click={disconnect}>Close the wallet!</button>
-            {/if}
-            {/if}
+            <br />
+          {:else} -->
+          <div class="success">Success! Operation Hash is {op_hash}</div>
+          <!-- {/if} -->
+        {/if}
       {:else}
         <button on:click={connect}>Open a wallet!</button>
-        <br><br />
+        <br /><br />
         <br />
       {/if}
-    </div>  
+    </div>
+    <br />
     <div class="note">
-      The contract is <a
+      See the operations <a
         href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
         >here</a
       >
-      <br /><br>
+      <br /><br />
       The project code is
       <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
-    </div> 
+    </div>
     <br />
     {#if blockHead}
-    <div class="chain-info">
-      <p>Protocol: {blockHead.protocol}</p>
-      <p>Level: {blockHead.level}</p>
-      <p>Block timestamp: {blockHead.lastUpdate}</p>
-    </div>
-  {/if}
+      <div class="chain-info">
+        <p>Protocol: {blockHead.protocol}</p>
+        <p>Level: {blockHead.level}</p>
+        <p>Block timestamp: {blockHead.lastUpdate}</p>
+      </div>
+    {/if}
+    <br />
+    <!-- <button on:click={disconnect}>Close wallet!</button> -->
   </div>
   <br />
 </main>
@@ -219,30 +214,34 @@
 <style lang="scss">
   $tezos-blue: #178309;
   $tezos-red: #ec1010;
-  @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap');
-  
-  :global(body){
-        background-color: rgb(243, 241, 134);
-     //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
-    }
+  @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap");
 
-  .errormessage { color: red; }
-  
+   :global(body) {
+     background-color: rgb(252, 252, 249);
+  //   //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
+   }
+
+  .errormessage {
+    color: red;
+    font-size: 18px;
+    font-family: "Racing Sans One", cursive;
+  }
+
   .container {
     font-size: 20px;
     max-width: 100%;
 
     .title {
       color: $tezos-blue;
-      font-family: 'Racing Sans One', cursive;
+      font-family: "Racing Sans One", cursive;
       font-size: 80px;
       margin: 10px;
     }
 
     .chain-info {
       font-size: 15px;
-      font-family: 'Racing Sans One', cursive;
+      font-family: "Racing Sans One", cursive;
 
       p {
         margin: 5px;
@@ -253,21 +252,21 @@
 
     .note {
       font-size: 18px;
-      font-family: 'Racing Sans One', cursive;
+      font-family: "Racing Sans One", cursive;
       color: $tezos-blue;
       margin: 10px;
     }
 
     .welcome {
       font-size: 24px;
-      font-family: 'Racing Sans One', cursive;
-      color: rgb(28, 134, 221);;
+      font-family: "Racing Sans One", cursive;
+      color: rgb(28, 134, 221);
       margin: 10px;
     }
 
     .success {
       font-size: 18px;
-      font-family: 'Racing Sans One', cursive;
+      font-family: "Racing Sans One", cursive;
       color: $tezos-red;
       margin: 10px;
     }
@@ -279,7 +278,7 @@
       background-color: white;
       padding: 4px;
       font-size: 11px;
-      font-family: 'Racing Sans One', cursive;
+      font-family: "Racing Sans One", cursive;
       color: $tezos-blue;
       transition: 0.3s;
       cursor: pointer;
