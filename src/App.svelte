@@ -247,8 +247,6 @@
         {/if}
       {:else}
         <button on:click={connect}>Open a wallet!</button>
-        <br /><br />
-        <br />
       {/if}
     </div>
     <div>
@@ -353,6 +351,7 @@
     }
 
     button {
+      margin: 10px;
       appearance: none;
       border: solid 2px $tezos-blue;
       border-radius: 5px;
