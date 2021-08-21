@@ -222,8 +222,8 @@
               >here</a
             >
           </div>
-          <br />
-        </div>
+          <button on:click={disconnect}>Close wallet!</button>
+          </div>
         <!-- <p /> -->
         {#if loading}
           <img src={"images/CatlickingPaw.gif"} alt="loading..." />
@@ -264,8 +264,6 @@
         The project code is
         <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
       </div>
-      <!-- <br /> -->
-      <!-- <button on:click={disconnect}>Close wallet!</button> -->
     </div>
   </div>
 </main>
