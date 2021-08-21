@@ -38,7 +38,9 @@
 
   const disconnect = () => {
     wallet.client.destroy();
+    Tezos.setWalletProvider(undefined);
     wallet = undefined;
+    userAddress = "";
   };
 
   let success = false;
@@ -216,16 +218,18 @@
           <div class="storage">
             New Simple Value Storage: {simpleValueStorage}
           </div>
-          <div class="note">
+          <div class="footer">
             See the operations <a
               href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
               >here</a
             >
           </div>
+          <br>
           <button on:click={disconnect}>Close wallet!</button>
           </div>
-        <!-- <p /> -->
+          <br>
         {#if loading}
+        <br>
           <img src={"images/CatlickingPaw.gif"} alt="loading..." />
         {:else if success}
           {#if errors > {}}
