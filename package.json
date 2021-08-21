@@ -1,5 +1,5 @@
 {
-  "name": "svelte-tezos-template",
+  "name": "tezos-bigmap-tester",
   "version": "1.0.0",
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",

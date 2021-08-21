@@ -196,7 +196,7 @@
           <input type="text" bind:value={compoundKeyInput} />
           <button on:click={compoundKey}>Go!</button>
           <div class="storage">
-            New Compound Key Storage: {compoundKeyStorage}
+            New Compound Key Storage: {compoundKeyStorage[1]}
           </div>
         </div>
         <br />
@@ -216,20 +216,25 @@
           <div class="storage">
             New Simple Value Storage: {simpleValueStorage}
           </div>
+          <div class="note">
+            See the operations <a
+              href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
+              >here</a
+            >
+          </div>
+          <br />
         </div>
         <!-- <p /> -->
         {#if loading}
-          <br />
-          <br />
-          <img src={"images/spinning_arrows.gif"} alt="loading..." />
+          <img src={"images/CatlickingPaw.gif"} alt="loading..." />
         {:else if success}
-          {#if errors > {} }
+          {#if errors > {}}
             <div class="errormessage">
               {errors}
             </div>
             <br />
           {:else}
-            <div class="success">Success! Operation Hash is {op_hash}</div>
+            <div class="success">Success! op.hash is {op_hash}</div>
           {/if}
         {/if}
       {:else}
@@ -240,16 +245,6 @@
     </div>
     <br />
     <div>
-      <div class="note">
-        See the operations <a
-          href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
-          >here</a
-        >
-        <br /><br />
-        The project code is
-        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
-      </div>
-      <br />
       {#if blockHead}
         <div class="chain-info">
           <p>Protocol: {blockHead.protocol}</p>
@@ -257,10 +252,21 @@
           <p>Block timestamp: {blockHead.lastUpdate}</p>
         </div>
       {/if}
-      <br />
+      <div class="footer">
+        <p />
+        Created with
+        <a
+          href="https://tezostaquito.io/"
+          target="_blank"
+          rel="noopener noreferrer nofollow">Taquito</a
+        >
+        <p />
+        The project code is
+        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
+      </div>
+      <!-- <br /> -->
       <!-- <button on:click={disconnect}>Close wallet!</button> -->
     </div>
-    <br />
   </div>
 </main>
 
@@ -271,8 +277,7 @@
   @import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap");
 
   :global(body) {
-    background-color: rgb(245, 245, 206);
-    //   //  background-image: url("https://www.uni-due.de/IERC/Ortelius_(1592).jpg?height=1200&width=1600");
+    background-color: rgb(245, 245, 146);
   }
 
   // .errormessage {
@@ -289,7 +294,7 @@
       color: $tezos-blue;
       font-family: "Racing Sans One", cursive;
       font-size: 80px;
-      margin: 10px;
+      //margin: 10px;
     }
 
     .chain-info {
@@ -318,17 +323,30 @@
     }
 
     .welcome {
-      font-size: 24px;
+      font-size: 20px;
       font-family: "Racing Sans One", cursive;
       color: rgb(28, 134, 221);
       margin: 10px;
     }
 
     .success {
-      font-size: 18px;
+      font-size: 16px;
       font-family: "Racing Sans One", cursive;
       color: $tezos-red;
       margin: 10px;
+    }
+
+    .footer {
+      font-size: 0.7rem;
+      text-align: center;
+      align-items: center;
+      font-family: "Racing Sans One", cursive;
+      color: $tezos-blue;
+
+      a {
+        color: #f52d1b;
+        text-decoration: none;
+      }
     }
 
     button {
