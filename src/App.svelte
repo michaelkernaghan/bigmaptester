@@ -259,13 +259,13 @@
       {/if}
       <div class="footer">
         <p />
-        Created with
+        <a href="https://github.com/michaelkernaghan/bigmaptester">V.1.1</a>
+        created with
         <a
           href="https://tezostaquito.io/"
           target="_blank"
           rel="noopener noreferrer nofollow">Taquito</a
-        >! The project code is
-        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>!
+        >!
       </div>
     </div>
   </div>
@@ -278,7 +278,7 @@
   @import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap");
 
   :global(body) {
-    background-color: rgb(245, 245, 146);
+    background-color: rgb(247, 247, 122);
   }
 
   // .errormessage {
