@@ -6,6 +6,8 @@
   import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
   import { Schema } from "@taquito/michelson-encoder";
 
+  import Box from "./Box.svelte";
+
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
   let userAddress: string;
@@ -188,48 +190,50 @@
 <main>
   <div class="container">
     <div class="title">Test BigMaps!</div>
-    <br />
     <div>
       {#if userAddress}
         <div class="welcome">Welcome {userAddress}!</div>
-        <br />
-        <div>
-          <div class="note">Update a Compound Key BigMap</div>
-          <input type="text" bind:value={compoundKeyInput} />
-          <button on:click={compoundKey}>Go!</button>
-          <div class="storage">
-            New Compound Key Storage: {compoundKeyStorage[1]}
+        <Box>
+          <div>
+            <div class="note">Update a Compound Key BigMap!</div>
+            <input type="text" bind:value={compoundKeyInput} />
+            <button on:click={compoundKey}>Go!</button>
+            <div class="storage">
+              New Compound Key Storage: {compoundKeyStorage[1]}
+            </div>
           </div>
+        </Box>
+        <Box>
+          <div>
+            <div class="note">Update a Compound Value BigMap!</div>
+            <input type="text" class="amount" bind:value={compoundValueInput} />
+            <button on:click={compoundValue}>Go!</button>
+            <div class="storage">
+              New Compound Value Storage: {compoundValueStorage[0]}
+            </div>
+          </div>
+        </Box>
+        <Box>
+          <div>
+            <div class="note">Update a Simple Value BigMap!</div>
+            <input type="text" class="amount" bind:value={simpleValueInput} />
+            <button on:click={singleValue}>Go!</button>
+            <div class="storage">
+              New Simple Value Storage: {simpleValueStorage}
+            </div>
+          </div></Box
+        >
+        <div class="footer">
+          See the operations <a
+            href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
+            >here</a
+          >!
         </div>
-        <br />
         <div>
-          <div class="note">Update a Compound Value BigMap</div>
-          <input type="text" class="amount" bind:value={compoundValueInput} />
-          <button on:click={compoundValue}>Go!</button>
-          <div class="storage">
-            New Compound Value Storage: {compoundValueStorage[0]}
-          </div>
-        </div>
-        <br />
-        <div>
-          <div class="note">Update a Simple Value BigMap</div>
-          <input type="text" class="amount" bind:value={simpleValueInput} />
-          <button on:click={singleValue}>Go!</button>
-          <div class="storage">
-            New Simple Value Storage: {simpleValueStorage}
-          </div>
-          <div class="footer">
-            See the operations <a
-              href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
-              >here</a
-            >
-          </div>
-          <br>
           <button on:click={disconnect}>Close wallet!</button>
-          </div>
-          <br>
+        </div>
         {#if loading}
-        <br>
+          <br />
           <img src={"images/CatlickingPaw.gif"} alt="loading..." />
         {:else if success}
           {#if errors > {}}
@@ -238,7 +242,7 @@
             </div>
             <br />
           {:else}
-            <div class="success">Success! op.hash is {op_hash}</div>
+            <div class="success">Success! op.hash is {op_hash}!</div>
           {/if}
         {/if}
       {:else}
@@ -247,7 +251,6 @@
         <br />
       {/if}
     </div>
-    <br />
     <div>
       {#if blockHead}
         <div class="chain-info">
@@ -263,10 +266,8 @@
           href="https://tezostaquito.io/"
           target="_blank"
           rel="noopener noreferrer nofollow">Taquito</a
-        >
-        <p />
-        The project code is
-        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>
+        >! The project code is
+        <a href="https://github.com/michaelkernaghan/bigmaptester">here</a>!
       </div>
     </div>
   </div>
