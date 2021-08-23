@@ -18,6 +18,7 @@
   let contractAddress = "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym";
 
   const rpcUrl = "https://api.tez.ie/rpc/granadanet";
+  
 
   const connect = async () => {
     try {
@@ -63,15 +64,17 @@
       const contract = await Tezos.wallet.at(contractAddress);
       const op = await contract.methods.compoundKey(compoundKeyInput).send();
       await op.confirmation();
-      op_hash = op.opHash;
-      compoundKeyStorage = await Tezos.contract.getBigMapKeyByID(
+
+      const compoundKeyStorage = await Tezos.contract.getBigMapKeysByID(
         "32001",
-        userAddress,
+      [
+        {0: 'tz1bkhCGUuA5bveCsMqXe9tEkopkZX3hiB9i', 1: '10'},
+        ],
         new Schema({
-          prim: "big_map",
+          prim: 'big_map',
           args: [
-            { prim: "pair", args: [{ prim: "address" }, { prim: "nat" }] },
-            { prim: "nat" },
+            { prim: 'pair', args: [{ prim: 'address' }, { prim: 'nat' }] },
+            { prim: 'nat' },
           ],
         })
       );
