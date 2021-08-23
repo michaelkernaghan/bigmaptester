@@ -5,8 +5,9 @@
   import { NetworkType } from "@airgap/beacon-sdk";
   import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
   import { Schema } from "@taquito/michelson-encoder";
-
+  
   import Box from "./Box.svelte";
+  import { stringify } from "querystring";
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
@@ -64,23 +65,14 @@
       const contract = await Tezos.wallet.at(contractAddress);
       const op = await contract.methods.compoundKey(compoundKeyInput).send();
       await op.confirmation();
-
-      const compoundKeyStorage = await Tezos.contract.getBigMapKeysByID(
-        "32001",
-      [
-        {0: 'tz1bkhCGUuA5bveCsMqXe9tEkopkZX3hiB9i', 1: '10'},
-        ],
-        new Schema({
-          prim: 'big_map',
-          args: [
-            { prim: 'pair', args: [{ prim: 'address' }, { prim: 'nat' }] },
-            { prim: 'nat' },
-          ],
-        })
-      );
+      op_hash = op.opHash;   
+      const storage: any = await contract.storage();
+      const compoundKeyStorage = await storage.compound_keys.get({0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT", 1: "10"});
+      console.log("result is: "+JSON.stringify(compoundKeyStorage));
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
+
     success = true;
     loading = false;
   };
@@ -188,6 +180,7 @@
     // closes subscription when component unmounts
     await subscription.stop();
   });
+
 </script>
 
 <main>
@@ -202,7 +195,8 @@
             <input type="text" bind:value={compoundKeyInput} />
             <button on:click={compoundKey}>Go!</button>
             <div class="storage">
-              New Compound Key Storage: {compoundKeyStorage[1]}
+              New Compound Key Storage: {JSON.stringify(compoundKeyStorage)}
+              {JSON.stringify(errors)}
             </div>
           </div>
         </Box>
@@ -212,7 +206,7 @@
             <input type="text" class="amount" bind:value={compoundValueInput} />
             <button on:click={compoundValue}>Go!</button>
             <div class="storage">
-              New Compound Value Storage: {compoundValueStorage[0]}
+              New Compound Value Storage: {JSON.stringify(compoundValueStorage)}
             </div>
           </div>
         </Box>
@@ -233,7 +227,7 @@
           >!
         </div>
         <div>
-          <button on:click={disconnect}>Close wallet!</button>
+          <button on:click={disconnect}>Disconnect wallet!</button>
         </div>
         {#if loading}
           <br />
@@ -245,11 +239,11 @@
             </div>
             <br />
           {:else}
-            <div class="success">Success! op.hash is {op_hash}!</div>
+            <div class="success">Request sent! op.hash is {op_hash}!</div>
           {/if}
         {/if}
       {:else}
-        <button on:click={connect}>Open a wallet!</button>
+        <button on:click={connect}>Connect a wallet!</button>
       {/if}
     </div>
     <div>
@@ -284,11 +278,11 @@
     background-color: rgb(247, 247, 122);
   }
 
-  // .errormessage {
-  //   color: red;
-  //   font-size: 18px;
-  //   font-family: "Racing Sans One", cursive;
-  // }
+  .errormessage {
+     color: red;
+     font-size: 18px;
+     font-family: "Racing Sans One", cursive;
+   }
 
   .container {
     font-size: 20px;
