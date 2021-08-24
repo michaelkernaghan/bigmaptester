@@ -7,7 +7,6 @@
   import { Schema } from "@taquito/michelson-encoder";
   
   import Box from "./Box.svelte";
-  import { stringify } from "querystring";
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
@@ -16,11 +15,10 @@
   let blockHead: { protocol: string; level: number; lastUpdate: string };
   let errors = {};
   let op_hash = "";
-  let contractAddress = "KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym";
+  let contractAddress = "KT1JgS1waFZC5mUiYWwbJu8sq9ftJMWvcBr9";
 
   const rpcUrl = "https://api.tez.ie/rpc/granadanet";
   
-
   const connect = async () => {
     try {
       wallet = new BeaconWallet({
@@ -49,12 +47,35 @@
 
   let success = false;
   let loading = false;
-  let compoundKeyInput = 10;
-  let compoundValueInput = 10;
-  let simpleValueInput = 10;
-  let compoundKeyStorage = "";
-  let compoundValueStorage = "";
+  let simpleValueInput = 6;
+  let compoundValueInput = 3141;
+  let compoundKeyInput = 117;
+  let compoundKeyCompoundValueInput = 934;
   let simpleValueStorage = "";
+  let compoundValueStorage = "";
+  let compoundKeyStorage = "";
+  let compoundKeyCompoundValueStorage = "";
+  
+  const compoundKeyCompoundValue = async () => {
+    errors = {};
+    op_hash = "";
+    success = false;
+    loading = true;
+    try {
+      const contract = await Tezos.wallet.at(contractAddress);
+      const op = await contract.methods.compoundKeyCompoundValue(compoundKeyCompoundValueInput).send();
+      await op.confirmation();
+      op_hash = op.opHash;   
+      const storage: any = await contract.storage();
+      compoundKeyCompoundValueStorage = await storage.compound_keys_compound_values.get({0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT", 1: compoundKeyCompoundValueInput});
+      console.log("result is: "+ JSON.stringify(compoundKeyCompoundValueStorage));
+    } catch (error) {
+      errors = JSON.stringify(error.message);
+    }
+
+    success = true;
+    loading = false;
+  };
 
   const compoundKey = async () => {
     errors = {};
@@ -67,8 +88,8 @@
       await op.confirmation();
       op_hash = op.opHash;   
       const storage: any = await contract.storage();
-      const compoundKeyStorage = await storage.compound_keys.get({0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT", 1: "10"});
-      console.log("result is: "+JSON.stringify(compoundKeyStorage));
+      compoundKeyStorage = await storage.compound_keys.get({0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT", 1: compoundKeyInput});
+      console.log("result is: "+ compoundKeyStorage);
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
@@ -90,7 +111,7 @@
       await op.confirmation();
       op_hash = op.opHash;
       compoundValueStorage = await Tezos.contract.getBigMapKeyByID(
-        "32002",
+        "36361",
         userAddress,
         new Schema({
           prim: "big_map",
@@ -118,7 +139,7 @@
       await op.confirmation();
       op_hash = op.opHash;
       simpleValueStorage = await Tezos.contract.getBigMapKeyByID(
-        "32003",
+        "36362",
         userAddress,
         new Schema({
           prim: "big_map",
@@ -189,17 +210,18 @@
     <div>
       {#if userAddress}
         <div class="welcome">Welcome {userAddress}!</div>
+        <br>
+        <div class="columns">
         <Box>
           <div>
-            <div class="note">Update a Compound Key BigMap!</div>
-            <input type="text" bind:value={compoundKeyInput} />
-            <button on:click={compoundKey}>Go!</button>
+            <div class="note">Update a Simple Value BigMap!</div>
+            <input type="text" class="amount" bind:value={simpleValueInput} />
+            <button on:click={singleValue}>Go!</button>
             <div class="storage">
-              New Compound Key Storage: {JSON.stringify(compoundKeyStorage)}
-              {JSON.stringify(errors)}
+              New Simple Value Storage: {simpleValueStorage}
             </div>
-          </div>
-        </Box>
+          </div></Box
+        >        
         <Box>
           <div>
             <div class="note">Update a Compound Value BigMap!</div>
@@ -212,17 +234,29 @@
         </Box>
         <Box>
           <div>
-            <div class="note">Update a Simple Value BigMap!</div>
-            <input type="text" class="amount" bind:value={simpleValueInput} />
-            <button on:click={singleValue}>Go!</button>
+            <div class="note">Update a Compound Key BigMap!</div>
+            <input type="text" class="amount" bind:value={compoundKeyInput} />
+            <button on:click={compoundKey}>Go!</button>
             <div class="storage">
-              New Simple Value Storage: {simpleValueStorage}
+              New Compound Key Storage: {compoundKeyStorage}
             </div>
-          </div></Box
-        >
+          </div>
+        </Box>
+
+        <Box>
+          <div>
+            <div class="note">Update a Compound Key Compound Value BigMap!</div>
+            <input type="text" class="amount" bind:value={compoundKeyCompoundValueInput} />
+            <button on:click={compoundKeyCompoundValue}>Go!</button>
+            <div class="storage">
+              New Compound Key Compound Value Storage: {JSON.stringify(compoundKeyCompoundValueStorage)}
+            </div>
+          </div>
+        </Box>
+      </div>
         <div class="footer">
           See the operations <a
-            href="https://better-call.dev/granadanet/KT1Sze6kE3veYrx9ep4ThdKvAa2KS1peAuym/operations"
+            href="https://better-call.dev/granadanet/KT1JgS1waFZC5mUiYWwbJu8sq9ftJMWvcBr9/operations"
             >here</a
           >!
         </div>
@@ -269,13 +303,13 @@
 </main>
 
 <style lang="scss">
-  $tezos-blue: #178309;
+  $tezos-blue: rgb(85, 5, 85);
   $tezos-red: #ec1010;
   @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&display=swap");
   @import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Yanone+Kaffeesatz&display=swap");
 
   :global(body) {
-    background-color: rgb(247, 247, 122);
+    background-color: #ecec8f;
   }
 
   .errormessage {
@@ -307,24 +341,24 @@
     }
 
     .note {
-      font-size: 18px;
+      font-size: 16px;
       font-family: "Racing Sans One", cursive;
       color: $tezos-blue;
-      margin: 10px;
+      margin: 5px;
     }
 
     .storage {
-      font-size: 16px;
+      font-size: 14px;
       font-family: "Racing Sans One", cursive;
-      color: rgb(28, 134, 221);
-      margin: 10px;
+      color: brown;
+      margin: 5px;
     }
 
     .welcome {
-      font-size: 20px;
+      font-size: 18px;
       font-family: "Racing Sans One", cursive;
-      color: rgb(28, 134, 221);
-      margin: 10px;
+      color: brown;
+      margin: 8px;
     }
 
     .success {
@@ -367,4 +401,7 @@
       }
     }
   }
+  .columns {
+  columns: 100px 2;
+}
 </style>
