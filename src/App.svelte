@@ -5,7 +5,7 @@
   import { NetworkType } from "@airgap/beacon-sdk";
   import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
   import { Schema } from "@taquito/michelson-encoder";
-  
+
   import Box from "./Box.svelte";
 
   let Tezos: TezosToolkit;
@@ -16,9 +16,10 @@
   let errors = {};
   let op_hash = "";
   let contractAddress = "KT1JgS1waFZC5mUiYWwbJu8sq9ftJMWvcBr9";
+  let create_remove_contractAddress = "KT1RnKwJFWbwZ1ifJU7uJWMsCRRkB5iPb6JZ";
 
   const rpcUrl = "https://api.tez.ie/rpc/granadanet";
-  
+
   const connect = async () => {
     try {
       wallet = new BeaconWallet({
@@ -55,7 +56,11 @@
   let compoundValueStorage = "";
   let compoundKeyStorage = "";
   let compoundKeyCompoundValueStorage = "";
-  
+  let createBigMapStorage = "";
+  let removeBigMapStorage = "";
+  let beforeRemovalBigMapStorage = "";
+  let afterRemovalBigMapStorage = "";
+
   const compoundKeyCompoundValue = async () => {
     errors = {};
     op_hash = "";
@@ -63,12 +68,20 @@
     loading = true;
     try {
       const contract = await Tezos.wallet.at(contractAddress);
-      const op = await contract.methods.compoundKeyCompoundValue(compoundKeyCompoundValueInput).send();
+      const op = await contract.methods
+        .compoundKeyCompoundValue(compoundKeyCompoundValueInput)
+        .send();
       await op.confirmation();
-      op_hash = op.opHash;   
+      op_hash = op.opHash;
       const storage: any = await contract.storage();
-      compoundKeyCompoundValueStorage = await storage.compound_keys_compound_values.get({0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT", 1: compoundKeyCompoundValueInput});
-      console.log("result is: "+ JSON.stringify(compoundKeyCompoundValueStorage));
+      compoundKeyCompoundValueStorage =
+        await storage.compound_keys_compound_values.get({
+          0: userAddress,
+          1: compoundKeyCompoundValueInput,
+        });
+      console.log(
+        "result is: " + JSON.stringify(compoundKeyCompoundValueStorage)
+      );
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
@@ -86,10 +99,13 @@
       const contract = await Tezos.wallet.at(contractAddress);
       const op = await contract.methods.compoundKey(compoundKeyInput).send();
       await op.confirmation();
-      op_hash = op.opHash;   
+      op_hash = op.opHash;
       const storage: any = await contract.storage();
-      compoundKeyStorage = await storage.compound_keys.get({0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT", 1: compoundKeyInput});
-      console.log("result is: "+ compoundKeyStorage);
+      compoundKeyStorage = await storage.compound_keys.get({
+        0: "tz1cDS63XNguugZvyYYYxX8mHLNP6NBSVNbT",
+        1: compoundKeyInput,
+      });
+      console.log("result is: " + compoundKeyStorage);
     } catch (error) {
       errors = JSON.stringify(error.message);
     }
@@ -153,6 +169,46 @@
     loading = false;
   };
 
+  const createBigMap = async () => {
+    errors = {};
+    op_hash = "";
+    loading = true;
+    success = false;
+    try {
+      const contract = await Tezos.wallet.at(create_remove_contractAddress);
+      const op = await contract.methods.createBigMap("unit").send();
+      await op.confirmation();
+      op_hash = op.opHash;
+      createBigMapStorage = await contract.storage();
+      console.log("BigMap Id is: " + createBigMapStorage);
+    } catch (error) {
+      errors = JSON.stringify(error.message);
+    }
+    success = true;
+    loading = false;
+  };
+
+  const removeBigMap = async () => {
+    errors = {};
+    op_hash = "";
+    loading = true;
+    success = false;
+    try {
+      const contract = await Tezos.wallet.at(create_remove_contractAddress);
+      beforeRemovalBigMapStorage = await contract.storage();
+      console.log("Before removal result is: " + beforeRemovalBigMapStorage);
+      const op = await contract.methods.removeBigMap("unit").send();
+      await op.confirmation();
+      op_hash = op.opHash;
+      afterRemovalBigMapStorage = await contract.storage();
+      //afterRemovalBigMapStorage = await storage.removeBigMap.get('tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN', { 0: 1, 1: 2 });
+      console.log("After removal result is: " + afterRemovalBigMapStorage);
+    } catch (error) {
+      errors = JSON.stringify(error.message);
+    }
+    success = true;
+    loading = false;
+  };
   const subscribeToEvents = async () => {
     const connection = new HubConnectionBuilder()
       .withUrl("https://api.tzkt.io/v1/events")
@@ -201,62 +257,97 @@
     // closes subscription when component unmounts
     await subscription.stop();
   });
-
 </script>
 
 <main>
   <div class="container">
-    <div class="title">Test BigMaps!</div>
+    <div class="title">Tezos BigMaps CRUD!</div>
     <div>
       {#if userAddress}
         <div class="welcome">Welcome {userAddress}!</div>
-        <br>
+        <br />
         <div class="columns">
-        <Box>
-          <div>
-            <div class="note">Update a Simple Value BigMap!</div>
-            <input type="text" class="amount" bind:value={simpleValueInput} />
-            <button on:click={singleValue}>Go!</button>
-            <div class="storage">
-              New Simple Value Storage: {simpleValueStorage}
+          <Box>
+            <div>
+              <div class="note">Update a Simple Value BigMap!</div>
+              <input type="text" class="amount" bind:value={simpleValueInput} />
+              <button on:click={singleValue}>Go!</button>
+              <div class="storage">
+                New Simple Value Storage: {simpleValueStorage}
+              </div>
+            </div></Box
+          >
+          <Box>
+            <div>
+              <div class="note">Update a Compound Value BigMap!</div>
+              <input
+                type="text"
+                class="amount"
+                bind:value={compoundValueInput}
+              />
+              <button on:click={compoundValue}>Go!</button>
+              <div class="storage">
+                New Compound Value Storage: {JSON.stringify(
+                  compoundValueStorage
+                )}
+              </div>
             </div>
-          </div></Box
-        >        
-        <Box>
-          <div>
-            <div class="note">Update a Compound Value BigMap!</div>
-            <input type="text" class="amount" bind:value={compoundValueInput} />
-            <button on:click={compoundValue}>Go!</button>
-            <div class="storage">
-              New Compound Value Storage: {JSON.stringify(compoundValueStorage)}
+          </Box>
+          <Box>
+            <div>
+              <div class="note">Create a BigMap!</div>
+              <button on:click={createBigMap}>Go!</button>
+              <div class="storage">
+                New Big Map Id: {JSON.stringify(createBigMapStorage)}!
+              </div>
             </div>
-          </div>
-        </Box>
-        <Box>
-          <div>
-            <div class="note">Update a Compound Key BigMap!</div>
-            <input type="text" class="amount" bind:value={compoundKeyInput} />
-            <button on:click={compoundKey}>Go!</button>
-            <div class="storage">
-              New Compound Key Storage: {compoundKeyStorage}
+          </Box>
+          <Box>
+            <div>
+              <div class="note">Update a Compound Key BigMap!</div>
+              <input type="text" class="amount" bind:value={compoundKeyInput} />
+              <button on:click={compoundKey}>Go!</button>
+              <div class="storage">
+                New Compound Key Storage: {compoundKeyStorage}
+              </div>
             </div>
-          </div>
-        </Box>
-
-        <Box>
-          <div>
-            <div class="note">Update a Compound Key Compound Value BigMap!</div>
-            <input type="text" class="amount" bind:value={compoundKeyCompoundValueInput} />
-            <button on:click={compoundKeyCompoundValue}>Go!</button>
-            <div class="storage">
-              New Compound Key Compound Value Storage: {JSON.stringify(compoundKeyCompoundValueStorage)}
+          </Box>
+          <Box>
+            <div>
+              <div class="note">
+                Update a Compound Key Compound Value BigMap!
+              </div>
+              <input
+                type="text"
+                class="amount"
+                bind:value={compoundKeyCompoundValueInput}
+              />
+              <button on:click={compoundKeyCompoundValue}>Go!</button>
+              <div class="storage">
+                New Compound Key Compound Value Storage: {JSON.stringify(
+                  compoundKeyCompoundValueStorage
+                )}
+              </div>
             </div>
-          </div>
-        </Box>
-      </div>
+          </Box>
+          <Box>
+            <div>
+              <div class="note">Remove a BigMap!</div>
+              <button on:click={removeBigMap}>Go!</button>
+              <div class="storage">
+                Current Id: {JSON.stringify(beforeRemovalBigMapStorage)}!  New BigMap Id: {JSON.stringify(afterRemovalBigMapStorage)}!   
+              </div>
+            </div>
+          </Box>
+        </div>
         <div class="footer">
           See the operations <a
             href="https://better-call.dev/granadanet/KT1JgS1waFZC5mUiYWwbJu8sq9ftJMWvcBr9/operations"
+            >here</a
+          >
+          and
+          <a
+            href="https://better-call.dev/granadanet/KT1RnKwJFWbwZ1ifJU7uJWMsCRRkB5iPb6JZ/operations"
             >here</a
           >!
         </div>
@@ -313,10 +404,10 @@
   }
 
   .errormessage {
-     color: red;
-     font-size: 18px;
-     font-family: "Racing Sans One", cursive;
-   }
+    color: red;
+    font-size: 18px;
+    font-family: "Racing Sans One", cursive;
+  }
 
   .container {
     font-size: 20px;
@@ -402,6 +493,6 @@
     }
   }
   .columns {
-  columns: 100px 2;
-}
+    columns: 100px 2;
+  }
 </style>
