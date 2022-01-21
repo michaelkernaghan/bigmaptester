@@ -342,12 +342,12 @@
         </div>
         <div class="footer">
           See the operations <a
-            href="https://better-call.dev/hangzhounet/KT1BwZSLdfAsw5dXEU99xCMZ9TRmZ9KbbuUy/operations"
+            href="https://better-call.dev/hangzhou2net/KT1BwZSLdfAsw5dXEU99xCMZ9TRmZ9KbbuUy/operations"
             >here</a
           >
           and
           <a
-            href="https://better-call.dev/hangzhounet/KT1KL3eowaRTCocSBAiN78Un58UrK8SfWo2r/operations"
+            href="https://better-call.dev/hangzhou2net/KT1KL3eowaRTCocSBAiN78Un58UrK8SfWo2r/operations"
             >here</a
           >!
         </div>
