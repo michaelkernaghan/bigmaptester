@@ -335,7 +335,7 @@
               <div class="note">Remove a BigMap!</div>
               <button on:click={removeBigMap}>Go!</button>
               <div class="storage">
-                Current Id: {JSON.stringify(beforeRemovalBigMapStorage)}!  New BigMap Id: {JSON.stringify(afterRemovalBigMapStorage)}!   
+                Before Storage: {JSON.stringify(beforeRemovalBigMapStorage)}!  After Storage: {JSON.stringify(afterRemovalBigMapStorage)}!   
               </div>
             </div>
           </Box>
