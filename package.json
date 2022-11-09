@@ -41,9 +41,10 @@
     "validate": "svelte-check"
   },
   "dependencies": {
+    "@airgap/beacon-sdk": "^3.3.0",
     "@microsoft/signalr": "^5.0.4",
-    "@taquito/beacon-wallet": "^11.1.0",
-    "@taquito/taquito": "^11.1.0",
+    "@taquito/beacon-wallet": "^14.0.0",
+    "@taquito/taquito": "^14.0.0",
     "file-loader": "^6.2.0",
     "sass": "^1.38.0"
   },
