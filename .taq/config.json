@@ -1,0 +1,123 @@
+{
+    "language": "en",
+    "contractsDir": "contracts",
+    "artifactsDir": "artifacts",
+    "network": {
+        "ghostnet": {
+            "label": "ghostnet",
+            "rpcUrl": "https://ghostnet.ecadinfra.com",
+            "protocol": "PtKathmankSpLLDALzWw7CGD2j2MtyveTwboEYokqUCP4a1LxMg",
+            "accounts": {
+                "taqRootAccount": {
+                    "publicKey": "p2pk64zfXNwQYp9XbN82x6V3faEy3dJongpoBgxFKP7TXZj4Q7cFqFZ",
+                    "publicKeyHash": "tz3fpcRFKjZYpegXbbDcZbL1hzFhKRbrVMKr",
+                    "privateKey": "p2sk2NAqhvNQUA312rr3QTxEd4UUQhRJKXMorubkvqXFKc6sTncaWu"
+                },
+                "taqOperatorAccount": {
+                    "publicKey": "p2pk65fx1sCJmpXF5wYPByi7AENNWT1Qyjg8Nkp1VXzPsKdbmDWEdhb",
+                    "publicKeyHash": "tz3P492J9PW6AmqSnn8h2m8wBZ7PvtYNTkVo",
+                    "privateKey": "p2sk2W6oJY35UsAmZMZLUPEi3DBdD5R9h7e97mwydYvYvgZWJwEdCq"
+                }
+            }
+        }
+    },
+    "sandbox": {
+        "local": {
+            "label": "Local Tezos Sandbox",
+            "rpcUrl": "http://localhost:20002",
+            "protocol": "PtKathmankSpLLDALzWw7CGD2j2MtyveTwboEYokqUCP4a1LxMg",
+            "accounts": {
+                "default": "bob",
+                "bob": {
+                    "encryptedKey": "edpkurPsQ8eUApnLUJ9ZPDvu98E8VNj4KtJa1aZr16Cr5ow5VHKnz4",
+                    "publicKeyHash": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
+                    "secretKey": "unencrypted:edsk3RFfvaFaxbHx8BMtEW1rKQcPtDML3LXjNqMNLCzC3wLC1bWbAt"
+                },
+                "alice": {
+                    "encryptedKey": "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn",
+                    "publicKeyHash": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+                    "secretKey": "unencrypted:edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq"
+                },
+                "john": {
+                    "encryptedKey": "edpktt6t2ENhxiQqun6bXPPWC6tFVvNPTDRh1gEPGX4BgDgbDnmGzP",
+                    "publicKeyHash": "tz1Zwoh1QCVAvJ4sVTojMp9pLYp6Ji4NoZy6",
+                    "secretKey": "unencrypted:edsk3Un2KRUUoWZufi914HQem96ejVFnkyD8GXRPUSkgqy5etsYXEN"
+                },
+                "jane": {
+                    "encryptedKey": "edpkvS6TDSWcqqj3EJi3NRrCMyN7oNw1B3Hp37R19tMThqM8YNhAuS",
+                    "publicKeyHash": "tz1aHUAC4oviwJuZF1EvVSvFz7cu9KMNYBph",
+                    "secretKey": "unencrypted:edsk3UkdS1UBfTBkMAoFxmfdmUHmCdNhTzDJ1cSJuZhU1b6k6fZZoQ"
+                },
+                "joe": {
+                    "encryptedKey": "edpkuT1QYPYbLLQz9dXhQS33ncsixxeGHbNGmntPTR4VBbWmskHPrV",
+                    "publicKeyHash": "tz1MVGjgD1YtAPwohsSfk8i3ZiT1yEGM2YXB",
+                    "secretKey": "unencrypted:edsk3Un2FU9Zeb4KEoATWdpAqcX5JArMUj2ew8S4SuzhPRDmGoqNx2"
+                }
+            },
+            "tzkt": {
+                "disableAutostartWithSandbox": false,
+                "postgresqlPort": 5434,
+                "apiPort": 5002
+            }
+        }
+    },
+    "environment": {
+        "default": "development",
+        "development": {
+            "networks": [],
+            "sandboxes": [
+                "local"
+            ],
+            "aliases": {
+                "bigmaptesterContractCode": {
+                    "address": "KT1NTLPthdtYszF5zg5EsLSMGrEJFB82SAiu"
+                },
+                "bigmaptesterContractRemoveAddress": {
+                    "address": "KT1DidD6uDbpHB1z56FrArFfLy8dB7DsFGEH"
+                }
+            }
+        },
+        "testing": {
+            "networks": [
+                "ghostnet"
+            ],
+            "sandboxes": [],
+            "aliases": {
+                "bigmaptesterContractCode": {
+                    "address": "KT1VYzA14jcsMZn1cotwQEofhrvjgiUuymG1"
+                },
+                "bigmaptesterContractRemoveAddress": {
+                    "address": "KT1WNsLE1Xgv8xtZqadQQHq9XDTmZdsmYkJA"
+                }
+            }
+        }
+    },
+    "accounts": {
+        "bob": "3_000_000_000",
+        "alice": "3_000_000_000",
+        "john": "3_000_000_000",
+        "jane": "3_000_000_000",
+        "joe": "3_000_000_000"
+    },
+    "plugins": [
+        {
+            "name": "@taqueria/plugin-ligo",
+            "type": "npm"
+        },
+        {
+            "name": "@taqueria/plugin-tezos-client",
+            "type": "npm"
+        },
+        {
+            "name": "@taqueria/plugin-flextesa",
+            "type": "npm"
+        },
+        {
+            "name": "@taqueria/plugin-taquito",
+            "type": "npm"
+        }
+    ],
+    "projectDir": "/home/michael/bigmaptester",
+    "configFile": "/home/michael/bigmaptester/.taq/config.json",
+    "hash": "dcb59665be7958468be069140a8710089bae247f20e52518b427e07d338e1c20"
+}

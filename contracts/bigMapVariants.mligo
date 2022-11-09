@@ -37,14 +37,14 @@ type parameter =
 type return = operation list * storage
 
 let update_simple_value (p, s : tez * storage) : storage =
-  { s with simples = Big_map.update Tezos.get_sender () (Some p) s.simples }
+  { s with simples = Big_map.update (Tezos.get_sender ()) (Some p) s.simples }
 
 let update_compound_value (p, s : int * storage) : storage = 
-  let stat : stat = { sender = Tezos.get_sender (); score = p } in
-  { s with compounds = Big_map.update Tezos.get_sender () (Some stat) s.compounds }
+  let stat : stat = { sender = (Tezos.get_sender ()); score = p } in
+  { s with compounds = Big_map.update (Tezos.get_sender ()) (Some stat) s.compounds }
 
 let update_compound_key (token_id, s : nat * storage) : storage =
-    let key = Tezos.get_sender (), token_id in
+    let key = (Tezos.get_sender ()), token_id in
     {s  with compound_keys = Big_map.update key (Some 10n) s.compound_keys }
 
 let main (p, s : parameter * storage) : operation list * storage =  

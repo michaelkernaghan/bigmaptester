@@ -1,0 +1,4 @@
+{ parameter unit ;
+  storage (big_map address int) ;
+  code { CDR ; PUSH int 4 ; SOME ; SENDER ; UPDATE ; NIL operation ; PAIR } }
+

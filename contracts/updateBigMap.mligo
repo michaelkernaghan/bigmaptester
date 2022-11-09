@@ -20,8 +20,6 @@ let values : register =
 
 let main (_p, s : unit * storage) : returnType =
       let updated_map: register =
-      Big_map.update Tezos.get_sender () (Some 4) s.values in
+      Big_map.update (Tezos.get_sender ()) (Some 4) s.values in
     let s = {s with values = updated_map}
   in ([] : operation list), s  
-
-

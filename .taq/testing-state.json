@@ -1,0 +1,33 @@
+{
+    "operations": {},
+    "tasks": {
+        "@taqueria/plugin-taquito.deploy.1667968642665": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1667968642665,
+            "output": [
+                {
+                    "contract": "bigmaptesterContractCode.tz",
+                    "address": "KT1VYzA14jcsMZn1cotwQEofhrvjgiUuymG1",
+                    "alias": "bigmaptesterContractCode",
+                    "balanceInMutez": "0",
+                    "destination": "https://ghostnet.ecadinfra.com"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.deploy.1668007296911": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1668007296911,
+            "output": [
+                {
+                    "contract": "bigmaptesterContractRemoveAddress.tz",
+                    "address": "KT1WNsLE1Xgv8xtZqadQQHq9XDTmZdsmYkJA",
+                    "alias": "bigmaptesterContractRemoveAddress",
+                    "balanceInMutez": "0",
+                    "destination": "https://ghostnet.ecadinfra.com"
+                }
+            ]
+        }
+    }
+}

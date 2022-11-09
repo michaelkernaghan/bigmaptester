@@ -1,0 +1,7 @@
+{ parameter (or (unit %getBalance) (unit %update)) ;
+  storage (big_map address mutez) ;
+  code { UNPAIR ;
+         IF_LEFT { DROP } { DROP ; AMOUNT ; SOME ; SENDER ; UPDATE } ;
+         NIL operation ;
+         PAIR } }
+

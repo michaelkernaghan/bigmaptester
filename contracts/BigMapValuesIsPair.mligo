@@ -15,9 +15,9 @@ type return = operation list * storage
 
 let update (p, s : stat * storage) :  return =
   let stat : stat =
-    {score =  String.sub 2n 1n p; country = String.sub 8n 5n Tezos.get_sender ()} in
+    {score =  String.sub 2n 1n p; country = String.sub 8n 5n (Tezos.get_sender ())} in
     let updated_map: standings =
-    Big_map.update Tezos.get_sender () (Some stat) s.stat in
+    Big_map.update (Tezos.get_sender ()) (Some stat) s.stat in
   let s = {s with league_table = updated_map}
   in ([] : operation list), s
 

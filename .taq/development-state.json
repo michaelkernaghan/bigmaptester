@@ -1,0 +1,102 @@
+{
+    "operations": {},
+    "tasks": {
+        "@taqueria/plugin-ligo.compile.1667923427575": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1667923427575,
+            "output": [
+                {
+                    "contract": "bigMapVariants.mligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1667923528495": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1667923528495,
+            "output": [
+                {
+                    "contract": "bigMapVariants.mligo",
+                    "artifact": "artifacts/bigMapVariants.tz"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1667923639322": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1667923639322,
+            "output": [
+                {
+                    "contract": "BigMapValuesIsPair.mligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1667923747549": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1667923747549,
+            "output": [
+                {
+                    "contract": "BigMapValuesIsPair.mligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1667923838338": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1667923838338,
+            "output": [
+                {
+                    "contract": "BigMapValuesIsPair.mligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.deploy.1667968430608": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1667968430608,
+            "output": [
+                {
+                    "contract": "bigmaptesterContractCode.tz",
+                    "address": "KT1NTLPthdtYszF5zg5EsLSMGrEJFB82SAiu",
+                    "alias": "bigmaptesterContractCode",
+                    "balanceInMutez": "0",
+                    "destination": "http://localhost:20002"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.deploy.1668005260327": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1668005260327,
+            "output": [
+                {
+                    "contract": "bigmaptesterContractRemoveAddress.tz",
+                    "address": "KT19T55MUMXfsAdkpZsJRxU2XuBfDTQK4GE3",
+                    "alias": "bigmaptesterContractRemoveAddress",
+                    "balanceInMutez": "0",
+                    "destination": "http://localhost:20002"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.deploy.1668006629511": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1668006629511,
+            "output": [
+                {
+                    "contract": "bigmaptesterContractRemoveAddress.tz",
+                    "address": "KT1DidD6uDbpHB1z56FrArFfLy8dB7DsFGEH",
+                    "alias": "bigmaptesterContractRemoveAddress",
+                    "balanceInMutez": "0",
+                    "destination": "http://localhost:20002"
+                }
+            ]
+        }
+    }
+}

@@ -4,7 +4,7 @@ import { contractBigMapCreateRemove } from './data/bigmaptestcreateremove';
 
 import { importKey } from '@taquito/signer';
 
-const provider = 'https://hangzhounet.api.tez.ie'
+const provider = 'https://ghostnet.ecadinfra.com'
 
 async function example() {
   const tezos = new TezosToolkit(provider)

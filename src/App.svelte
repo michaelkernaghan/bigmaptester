@@ -15,20 +15,20 @@
   let blockHead: { protocol: string; level: number; lastUpdate: string };
   let errors = {};
   let op_hash = "";
-  let contractAddress = "KT1BwZSLdfAsw5dXEU99xCMZ9TRmZ9KbbuUy";
-  let create_remove_contractAddress = "KT1KL3eowaRTCocSBAiN78Un58UrK8SfWo2r";
+  let contractAddress = "KT1VYzA14jcsMZn1cotwQEofhrvjgiUuymG1";
+  let create_remove_contractAddress = "KT1WNsLE1Xgv8xtZqadQQHq9XDTmZdsmYkJA";
 
-  const rpcUrl = "https://hangzhounet.api.tez.ie";
+  const rpcUrl = "https://ghostnet.ecadinfra.com";
 
   const connect = async () => {
     try {
       wallet = new BeaconWallet({
         name: "BigMapTesting",
-        preferredNetwork: NetworkType.HANGZHOUNET
+        preferredNetwork: NetworkType.GHOSTNET
       });
       await wallet.requestPermissions({
         network: {
-          type: NetworkType.HANGZHOUNET,
+          type: NetworkType.GHOSTNET,
           rpcUrl,
         },
       });
@@ -237,7 +237,7 @@
     Tezos = new TezosToolkit(rpcUrl);
     wallet = new BeaconWallet({
       name: "BigMapTesting",
-      preferredNetwork: NetworkType.HANGZHOUNET,
+      preferredNetwork: NetworkType.GHOSTNET
     });
     const activeAccount = await wallet.client.getActiveAccount();
     if (activeAccount) {
@@ -342,12 +342,12 @@
         </div>
         <div class="footer">
           See the operations <a
-            href="https://better-call.dev/hangzhou2net/KT1BwZSLdfAsw5dXEU99xCMZ9TRmZ9KbbuUy/operations"
+            href="https://better-call.dev/ghostnet/KT1VYzA14jcsMZn1cotwQEofhrvjgiUuymG1/operations"
             >here</a
           >
           and
           <a
-            href="https://better-call.dev/hangzhou2net/KT1KL3eowaRTCocSBAiN78Un58UrK8SfWo2r/operations"
+            href="https://better-call.dev/ghostnet/KT1WNsLE1Xgv8xtZqadQQHq9XDTmZdsmYkJA/operations"
             >here</a
           >!
         </div>

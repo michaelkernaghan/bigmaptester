@@ -10,11 +10,11 @@ type action =
 | GetBalance
 
 let update (s : storage) :  storage =
-  Big_map.update Tezos.get_sender () (Some Tezos.amount) s 
+  Big_map.update (Tezos.get_sender ()) (Some (Tezos.get_amount ())) s 
 
 let get_balance (s : storage) : storage =
-  let value = match Big_map.find_opt Tezos.get_sender () s with
-    Some value -> value
+  let _value = match Big_map.find_opt (Tezos.get_sender ()) s with
+    Some _value -> _value
     | None -> 0tez
   in s
 

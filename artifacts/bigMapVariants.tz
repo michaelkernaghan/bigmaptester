@@ -1,0 +1,43 @@
+{ parameter (or (or (nat %compoundKey) (int %compoundValue)) (mutez %singleValue)) ;
+  storage
+    (pair (pair (big_map %compound_keys (pair address nat) nat)
+                (big_map %compounds address (pair (int %score) (address %sender))))
+          (big_map %simples address mutez)) ;
+  code { UNPAIR ;
+         IF_LEFT
+           { IF_LEFT
+               { SENDER ;
+                 PAIR ;
+                 DUP 2 ;
+                 CDR ;
+                 DUP 3 ;
+                 CAR ;
+                 CDR ;
+                 DIG 3 ;
+                 CAR ;
+                 CAR ;
+                 PUSH nat 10 ;
+                 SOME ;
+                 DIG 4 ;
+                 UPDATE }
+               { SENDER ;
+                 SWAP ;
+                 PAIR ;
+                 DUP 2 ;
+                 CDR ;
+                 DUP 3 ;
+                 CAR ;
+                 CDR ;
+                 DIG 2 ;
+                 SOME ;
+                 SENDER ;
+                 UPDATE ;
+                 DIG 2 ;
+                 CAR ;
+                 CAR } ;
+             PAIR }
+           { DUP 2 ; CDR ; SWAP ; SOME ; SENDER ; UPDATE ; SWAP ; CAR } ;
+         PAIR ;
+         NIL operation ;
+         PAIR } }
+
